@@ -5,10 +5,10 @@
 
 function findExtrema(y, t)
 
-	max  = []	#array for storing local maxima
-	min  = []	#array for storing local minima
-	tMax = []	#array for storing location of maxima
-	tMin = []	#array for storing location of minima
+	max  = Any[]	#array for storing local maxima
+	min  = Any[]	#array for storing local minima
+	tMax = Any[]	#array for storing location of maxima
+	tMin = Any[]	#array for storing location of minima
 
 	for i = 2:length(y)-1
 		if(y[i-1] < y[i] && y[i] > y[i+1])
