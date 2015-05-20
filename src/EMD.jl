@@ -1,6 +1,7 @@
 module EMD
 
 include("EMDUtil.jl")
+using Splines
 
 export findExtrema
 # put code here
