@@ -28,6 +28,7 @@ function IMF(y, t, tol, order, N)
 		#Keep finding extrema of y, finding their average
 		#and subtracting the average until the new avg is close to zero
 		#Along the way store the sum of the averages
+		#when done we move on to computing the averages of the newly computed function
 		while(sum(abs(avg)) > tol)
 
 			max, min, tmax, tmin = findExtrema(tempy,t)
