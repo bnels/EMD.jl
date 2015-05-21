@@ -16,7 +16,9 @@ function IMF(y, t, tol, order, N)
 	end
 
 	f = []
-	temp = zeros(n,1)
+	tempf = zeros(n,1)
+	tempy = []
+	append!(tempy, y)
 	avg = zeros(n,1)+1
 
 	#Currently just try to compute N IMFs
@@ -28,20 +30,22 @@ function IMF(y, t, tol, order, N)
 		#Along the way store the sum of the averages
 		while(sum(abs(avg)) > tol)
 
-			max, min, tmax, tmin = findExtrema(y,t)
+			max, min, tmax, tmin = findExtrema(tempy,t)
 			S1 = Spline(max, tmax, order)
 			S2 = Spline(max, tmin, order)
 
 			avg = (S1(t) + S2(t))/2.0;
-			temp = temp + avg
-			y = y - avg
+			tempf = tempf + avg
+			tempy = tempy - avg
 		end
 
-		append!(f, temp)
-		temp = zeros(n,1)
+		tempy = []
+		append!(tempy, tempf)
+		append!(f, tempf)
+		tempf = zeros(n,1)
 	end
 
-	f = reshape(F, (n,N))
+	f = reshape(f, (n,N))
 
 	return f, y
 end
