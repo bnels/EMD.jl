@@ -4,51 +4,37 @@ include("EMDUtil.jl")
 using Splines
 
 export findExtrema
+export IMF
+
 # put code here
 println("EMD.jl has been initialized")
 
 #Function to calculate intrinsic mode functions
-function IMF(y, t, tol, order, N)
+function IMF(y, t, tol=0.01, order=3, N=5)
 
 	n = length(y)
-	if(length(t) != n)
-		throw(DimensionMismatch())
-	end
+	f = zeros(n,N)
+	tempy = copy(y)
 
-	f = []
-	tempf = zeros(n,1)
-	tempy = []
-	append!(tempy, y)
-	avg = zeros(n,1)+1
-
-	#Currently just try to compute N IMFs
-	#TO DO replace this by a better stop condition
 	for i = 1:N
+	    avg = zeros(n,1)+1
 
-		#Keep finding extrema of y, finding their average
-		#and subtracting the average until the new avg is close to zero
-		#Along the way store the sum of the averages
-		#when done we move on to computing the averages of the newly computed function
-		while(sum(abs(avg)) > tol)
+	    while(abs(mean(avg))>tol)
+	    	
+	        max, min, tmax, tmin = findExtrema(tempy, t)
+	        S1 = Spline(max, tmax, order)
+	        S2 = Spline(min, tmin, order)
+	        avS = (S1+S2)/2
+	        avg = avS(t)
+	        tempy = tempy-avg
+	        f[:,i] = f[:,i] + avg
 
-			max, min, tmax, tmin = findExtrema(tempy,t)
-			S1 = Spline(max, tmax, order)
-			S2 = Spline(max, tmin, order)
+	    end
 
-			avg = (S1(t) + S2(t))/2.0;
-			tempf = tempf + avg
-			tempy = tempy - avg
-		end
-
-		tempy = []
-		append!(tempy, tempf)
-		append!(f, tempf)
-		tempf = zeros(n,1)
+	    tempy = copy(f[:,i])
 	end
 
-	f = reshape(f, (n,N))
-
-	return f, y
+	return f
 end
 
 
