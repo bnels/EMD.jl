@@ -7,7 +7,7 @@ export findExtrema
 export IMF
 
 # put code here
-println("EMD.jl has been initialized")
+#println("EMD.jl has been initialized")
 
 #Function to calculate intrinsic mode functions
 function IMF(y, t, tol=0.01, order=3, N=5)

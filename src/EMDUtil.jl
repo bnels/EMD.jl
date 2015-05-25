@@ -35,5 +35,11 @@ function findExtrema(y::Vector{Float64}, t::Vector{Float64})
 	push!(tMax, t[n])
 	push!(tMin, t[n])
 
+	#fix value to extrapolate
+	max[end] = max[end-1]
+	min[end] = min[end-1]
+	max[1] = max[2]
+	min[1] = min[2]
+
 	return max, min, tMax, tMin
 end
