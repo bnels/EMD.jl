@@ -5,30 +5,36 @@ using Splines
 
 export findExtrema
 export IMF
+export IF
 
-# put code here
-#println("EMD.jl has been initialized")
 
 #Function to calculate intrinsic mode functions
-function IMF(y, t, tol=0.01, order=3, N=5)
+function IMF(y, t, tol=0.01, order=4, N=5)
 
 	n = length(y)
 	f = zeros(n,N)
 	tempy = copy(y)
+	eps = 0.00001
 
 	for i = 1:N
 	    avg = zeros(n,1)+1
+	    sd = 1.0
 
-	    while(abs(mean(avg))>tol)
+	    while(mean(abs(avg))>tol && sd > tol)
 
 	        max, min, tmax, tmin = findExtrema(tempy, t)
+
 	        S1 = Spline(max, tmax, order)
 	        S2 = Spline(min, tmin, order)
 	        avS = (S1+S2)/2
 	        avg = avS(t)
 	        tempy = tempy-avg
+
+	        sd = mean( (avg.^2)./((y-f[:,i]).^2 + eps) ) 
+
 	        f[:,i] = f[:,i] + avg
 
+	        println(sd)
 	    end
 
 	    tempy = copy(f[:,i])
@@ -43,5 +49,10 @@ function IMF(y, t, tol=0.01, order=3, N=5)
 	return C
 end
 
+#function to calculate instantaneous frequencies
+function IF(C)
+
+
+end
 
 end # module
