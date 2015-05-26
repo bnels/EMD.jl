@@ -10,7 +10,11 @@ export IF
 
 #Function to calculate intrinsic mode functions
 #N is the maximum number of modes to find
-function IMF(y, t, toldev=0.01, tolzero = 0.01, order=4, N=5)
+function IMF(y, t, toldev=0.01, tolzero = 0.01, order=4, N=5,window=0)
+
+	if window==0
+		window = ones(length(t))
+	end
 
 	n = length(y)
 	f = zeros(n,N)
@@ -39,14 +43,17 @@ function IMF(y, t, toldev=0.01, tolzero = 0.01, order=4, N=5)
 	        # # At least linear
 	        # p_max = max(p_max,2)
 	        # p_min = max(p_min,2)
-	        p_max = (length(max_ar)-2 >= order)? order : 2
-	        p_min = (length(min_ar)-2 >= order)? order : 2
+	        p_max = (length(max_ar) >= order)? order : 4
+	        p_min = (length(min_ar) >= order)? order : 4
+
 
 	        S1 = Spline(max_ar, tmax, p_max)
 	        S2 = Spline(min_ar, tmin, p_min)
 
 	        # Find mean of envelope
 	        avg = (S1(t) + S2(t)) / 2
+	        avg = avg.*window
+
 	        tempy = tempy-avg
 
 	        sd = mean( (avg.^2)./((y-f[:,i]).^2 + eps) )
