@@ -90,7 +90,7 @@ function IF(C, t, x=0, order=4, window=0)
 	n = length(t)
 
 	if window == 0
-		window = ones(lengh(t))
+		window = ones(length(t))
 	end
 
 	if x == 0
