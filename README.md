@@ -1,3 +1,7 @@
+__This package is no longer maintained__
+
+Code was originally written for Julia v0.4.
+
 # EMD.jl
 An Empirical Mode Decomposition Package for Julia
 
